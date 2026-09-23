@@ -18,7 +18,7 @@ export default function PublicView({ collected, donorsCount }) {
     title: 'Bantuan Pangan & Kebutuhan Pokok untuk Kaum Dhuafa',
     organizer: 'Mahasiswa & Mahasiswi Universitas Muhammadiyah Tangerang',
     target: 2000000,
-    timeRemainingText: '5 Minggu Lagi',
+    timeRemainingText: '6 Minggu Lagi',
     description: 'Mari bersama-sama ulurkan tangan membantu saudara-saudara kita dari kalangan dhuafa, lansia sebatang kara, dan keluarga prasejahtera. Donasi yang Anda berikan akan disalurkan dalam bentuk paket sembako, makanan gizi layak, dan bantuan kebutuhan dasar harian.'
   };
 
