@@ -1,4 +1,4 @@
-export const ADMIN_WA_NUMBER = "6285841277953";
+export const ADMIN_WA_NUMBER = "6287739488665";
 export const ADMIN_PIN = "admin123";
 
 export const formatRupiah = (number) => {
