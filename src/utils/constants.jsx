@@ -13,8 +13,8 @@ export const PAYMENT_INFO = {
   bankAccounts: [
     {
       bankName: 'SeaBank',
-      accountNumber: ' 901846453981 ',
-      accountHolder: 'Amanda Zahra'
+      accountNumber: ' 901142493708 ',
+      accountHolder: ' Nisaatun Ahsana Salsabillah'
     },
     {
       bankName: 'DANA',
