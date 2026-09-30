@@ -1,4 +1,4 @@
-// components/PublicView.jsx
+// src/components/PublicView.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, 
@@ -11,8 +11,30 @@ import {
   RefreshCw,
   Target
 } from 'lucide-react';
-import { ADMIN_WA_NUMBER, INITIAL_ACTIVITY_PHOTOS } from '../utils/constants';
+import { ADMIN_WA_NUMBER } from '../utils/constants';
 import QrisSection from './QrisSection';
+
+// 1. DAFTAR FOTO BANNER (Lokasi di folder public/)
+const bannerPhotos = [
+  '/foto1.png',
+  '/foto2.png',
+  '/foto3.png'
+];
+
+// 2. DAFTAR FOTO DOKUMENTASI KEGIATAN (Lokasi di folder public/)
+// Catatan: Jika nama file Anda pakai spasi, gunakan nama persis seperti di folder public
+const localActivityPhotos = [
+  '/kegiatan 1.jpeg',
+  '/kegiatan 2.jpeg',
+  '/kegiatan 3.jpeg',
+  '/kegiatan 4.jpeg',
+  '/kegiatan 5.jpeg',
+  '/kegiatan 6.jpeg'
+];
+
+// Gambar Cadangan jika file di folder public belum ada / salah nama
+const FALLBACK_BANNER = "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000&auto=format&fit=crop";
+const FALLBACK_ACTIVITY = "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop";
 
 export default function PublicView() {
   const campaign = {
@@ -25,18 +47,14 @@ export default function PublicView() {
 
     Mari sisihkan sebagian rezeki yang kita miliki dan bersama-sama wujudkan kebaikan yang dapat dirasakan oleh orang lain.`,
     objectives: [
-      'Penyaluran 100+ paket sembako langsung ke target sasaran (lansia & dhuafa sebatang kara).',
-      'Pemberian santunan kebutuhan dasar harian untuk meringankan beban keluarga prasejahtera.',
-      'Pendistribusian makanan siap saji dan bantuan gizi layak di wilayah Tangerang dan sekitarnya.'
+      'Membantu memenuhi kebutuhan kaum dhuafa yang membutuhkan bantuan..',
+      'Meringankan beban ekonomi kaum dhuafa melalui bantuan dana.',
+      'Menghimpun dana dari donatur dan pihak brand untuk disalurkan kepada kaum dhuafa.',
+      'Meningkatkan kepedulian sosial dan mengajak berbagai pihak untuk ikut membantu masyarakat yang membutuhkan.',
     ]
   };
 
-  const bannerPhotos = [
-    'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=1200',
-  ];
-  
+  // --- SLIDESHOW BANNER ---
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
   useEffect(() => {
@@ -44,23 +62,21 @@ export default function PublicView() {
       setCurrentPhoto((prev) => (prev + 1) % bannerPhotos.length);
     }, 3500);
     return () => clearInterval(timer);
-  }, [bannerPhotos.length]);
+  }, []);
 
-  const [activityPhotos, setActivityPhotos] = useState([]);
+  // --- DOKUMENTASI KEGIATAN ---
+  const [activityPhotos, setActivityPhotos] = useState(localActivityPhotos);
 
   const randomizeActivityPhotos = () => {
-    const shuffled = [...INITIAL_ACTIVITY_PHOTOS].sort(() => 0.5 - Math.random());
-    const randomExtra = [
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/500/350`,
-      `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/500/350`
-    ];
-    setActivityPhotos([...shuffled.slice(0, 4), ...randomExtra]);
+    const shuffled = [...localActivityPhotos].sort(() => 0.5 - Math.random());
+    setActivityPhotos(shuffled);
   };
 
   useEffect(() => {
-    randomizeActivityPhotos();
+    setActivityPhotos(localActivityPhotos);
   }, []);
 
+  // --- FORM DONASI ---
   const [donorName, setDonorName] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
 
@@ -128,14 +144,18 @@ export default function PublicView() {
                   src={bannerPhotos[currentPhoto]} 
                   alt="Kegiatan Bantuan Donasi" 
                   className="w-full h-full object-cover transition-all duration-700 ease-in-out transform hover:scale-105"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = FALLBACK_BANNER;
+                  }}
                 />
-                <div className="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                <div className="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md z-10">
                   <Sparkles className="w-3.5 h-3.5" />
                   Program Khusus Dhuafa
                 </div>
                 
                 {/* Dots Navigasi Slideshow */}
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
                   {bannerPhotos.map((_, idx) => (
                     <button
                       key={idx}
@@ -228,6 +248,10 @@ export default function PublicView() {
                       src={url} 
                       alt={`Kegiatan Bantuan ${idx + 1}`} 
                       className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = FALLBACK_ACTIVITY;
+                      }}
                     />
                   </div>
                 ))}
